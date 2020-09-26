@@ -1,0 +1,23 @@
+Web Components bao gồm ba công nghệ riêng biệt được sử dụng cùng nhau:
+
+Custom Elements. Nói một cách đơn giản, đây là các thành phần HTML hợp lệ với các template, behaviors và tag name tùy chỉnh (ví dụ: <one-dialog> ) được tạo bằng một bộ API JavaScript. Các thành phần tùy chỉnh được mô tả trong custom-element.
+
+Shadow DOM. Có khả năng cô lập CSS và JavaScript, gần giống như <iframe> . Điều này được định nghĩa trong shadow-trees .
+
+HTML templates. Các template do người dùng xác định trong HTML không được hiển thị cho đến khi được gọi. Thẻ <template> được xác định trong template-element .
+
+
+Vòng đời:
+
+constructor: constructor được gọi 1 lần khi element được tạo ra hoặc nâng cấp (chúng ta sẽ nói về nó sau). Đa số nó được dùng để khởi tạo state (trạng thái), gắn kết các event listener, tạo shadow DOM, vân vân. Lưu ý bạn hầu như cần phải gọi super() trong constructor.
+connectedCallback: phương thức connectedCallback được gọi mỗi lần element được thêm vào DOM. Nó có thể được dùng (khuyến nghị nên dùng) để delay (hoãn lại) vài việc cho đến khi element thực sự được gắn vào trang (chẳng hạn như lấy tài nguyên từ server).
+disconnectedCallback: tương tự như connectedCallback thì disconnectedCallback được gọi khi 1 element bị lấy ra khỏi DOM. Thường là để giải phóng tài nguyên. Lưu ý rằng disconnectedCallback không bao giờ được gọi nếu như user đóng tab. Hãy cẩn thận với những thứ mà bạn khởi tạo lúc đầu.
+attributeChangedCallback: phương thức này được gọi khi 1 attribute của element được thêm vào, gỡ ra, cập nhật hoặc thay thế. Nó cũng được gọi khi element được tạo ra bởi parser. Tuy nhiên, lưu ý rằng nó chỉ áp dụng cho các attribute nằm trong danh sách an toàn (whitelist) của property observedAttributes
+addoptedCallback: phương thức này được gọi khi document.adoptNote(...) được gọi để đưa đó sang 1 document khác.
+
+
+static get observedAttributes()
+
+To get the attributeChangedCallback() callback to fire when an attribute changes, you have to observe the attributes. This is done by specifying a static get observedAttributes() method inside custom element class - this should return  an array containing the names of the attributes you want to observe:
+
+static get observedAttributes() { return ['c', 'l']; }
